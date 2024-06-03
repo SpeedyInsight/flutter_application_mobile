@@ -1,281 +1,218 @@
-// import 'dart:convert';
-// import 'package:crypto/crypto.dart';
-// import 'package:flutter/material.dart';
-// import 'package:responsi_praktpm_129/service/database_helper.dart';
-// import 'package:responsi_praktpm_129/view/home_page.dart';
-// import 'package:responsi_praktpm_129/view/signup.dart';
+import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
+import '../HomePage/HomePage.dart';
+import '../helper/DatabaseHelper.dart';
+import 'SignUpPage.dart';
 
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-// class _LoginPageState extends State<LoginPage> {
-//   final username_controller = TextEditingController();
-//   final password_controller = TextEditingController();
-//   bool isLogin = true;
-//   bool isHidden = true;
+class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-//   final _formKey = GlobalKey<FormState>();
+  Widget _buildTextField(
+      String hint, bool isPassword, TextEditingController controller) {
+    return TextFormField(
+      enabled: true,
+      obscureText: isPassword,
+      controller: controller,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: Colors.white70),
+        filled: true,
+        fillColor: Colors.black.withOpacity(0.3),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 14.0,
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "$hint tidak boleh kosong";
+        }
+        return null;
+      },
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       body: ListView(
-//         key: _formKey,
-//         children: [
-//           Padding(
-//             padding: EdgeInsets.only(top: 50, left: 60),
-//             child: Text(
-//               'Login',
-//               style: TextStyle(
-//                 fontSize: 30,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.white,
-//               ),
-//             ),
-//           ),
-//           Padding(
-//             padding: EdgeInsets.only(top: 0, left: 60, bottom: 30),
-//             child: Text(
-//               'Login to your account!',
-//               style: TextStyle(
-//                 fontSize: 15,
-//                 color: Colors.white,
-//               ),
-//             ),
-//           ),
-//           Card(
-//             shadowColor: Colors.black,
-//             color: Colors.white,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.end,
-//                 children: [
-//               Column(
-//                 children: [
-//                   Padding(
-//                     padding:
-//                         const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-//                     child: Center(
-//                       child: usernameField(),
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding:
-//                         const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-//                     child: Center(
-//                       child: passwordField(),
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.only(
-//                         bottom: 0, left: 100, right: 100, top: 20),
-//                     child: Center(
-//                       child: loginButton(),
-//                     ),
-//                   ),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       const Text("Belum punya akun?"),
-//                       TextButton(
-//                         onPressed: () {
-//                           Navigator.pushReplacement(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => const RegisterPage(),
-//                             ),
-//                           );
-//                         },
-//                         child: const Text('Daftar'),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ]),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
+  Widget loginButton() {
+    return _submit(
+      labelButton: "Login",
+      submitCallback: (value) {
+        String currentUsername = usernameController.value.text;
+        String currentPassword = passwordController.value.text;
 
-//   Widget usernameField() {
-//     return Container(
-//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-//       child: TextFormField(
-//         enabled: true,
-//         controller: username_controller,
-//         decoration: InputDecoration(
-//           fillColor: Colors.black,
-//           border: OutlineInputBorder(
-//             borderRadius: BorderRadius.circular(40),
-//             borderSide: BorderSide(
-//               color: Colors.black,
-//             ),
-//           ),
-//           enabledBorder: OutlineInputBorder(
-//             borderRadius: const BorderRadius.all(Radius.circular(50)),
-//             borderSide: BorderSide(color: (isLogin) ? Colors.black : Colors.red),
-//           ),
-//           labelText: "Username",
-//         ),
-//         validator: (value) {
-//           if (value == null || value.isEmpty) {
-//             return "Username tidak boleh kosong";
-//           }
-//         },
-//       ),
-//     );
-//   }
+        prosesLogin(currentUsername, currentPassword);
+      },
+    );
+  }
 
-//   Widget passwordField() {
-//     return Container(
-//         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-//         child: TextFormField(
-//           enabled: true,
-//           controller: password_controller,
-//           obscureText: isHidden,
-//           decoration: InputDecoration(
-//             border: const OutlineInputBorder(
-//               borderRadius: BorderRadius.all(Radius.circular(50)),
-//               borderSide: BorderSide(color: Colors.black),
-//             ),
-//             enabledBorder: OutlineInputBorder(
-//               borderRadius: const BorderRadius.all(Radius.circular(50)),
-//               borderSide:
-//                   BorderSide(color: (isLogin) ? Colors.black : Colors.red),
-//             ),
-//             suffixIcon: GestureDetector(
-//               onTap: () {
-//                 setState(() {
-//                   isHidden = !isHidden;
-//                 });
-//               },
-//               child: Icon(
-//                 isHidden ? Icons.visibility_off : Icons.visibility,
-//                 color: isHidden ? Colors.grey : Colors.black,
-//               ),
-//             ),
-//             labelText: 'Password',
-//           ),
-//           validator: (value) {
-//             if (value == null || value.isEmpty) {
-//               return "Password tidak boleh kosong";
-//             }
-//             return null;
-//           },
-//         ));
-//   }
+  Widget _submit({
+    required String labelButton,
+    required Function(String) submitCallback,
+  }) {
+    return Container(
+      child: ElevatedButton(
+        onPressed: () {
+          submitCallback(labelButton);
+        },
+        child: Text('Login'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.amber,
+          padding: EdgeInsets.symmetric(vertical: 16.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+      ),
+    );
+  }
 
-//   Widget loginButton() {
-//     return _submitButton(
-//       labelButton: "Login",
-//       submitCallback: (value) {
-//         String currentUsername = username_controller.value.text;
-//         String currentPassword = password_controller.value.text;
+  void prosesLogin(String username, String password) async {
+    final DatabaseHelper databaseHive = DatabaseHelper();
+    final enkripPassword = sha256.convert(utf8.encode(password)).toString();
+    bool found = false;
 
-//         prosesLogin(currentUsername, currentPassword);
-//       },
-//     );
-//   }
+    found = databaseHive.cekLogin(username, password);
 
-//   Widget _submitButton({
-//     required String labelButton,
-//     required Function(String) submitCallback,
-//   }) {
-//     return Container(
-//         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-//         width: MediaQuery.of(context).size.width,
-//         child: ElevatedButton(
-//           onPressed: () {
-//             submitCallback(labelButton);
-//           }, //prosesLogin,
-//           child: const Text('Login'),
-//           style: ElevatedButton.styleFrom(
-//               minimumSize: const Size.fromHeight(40),
-//               primary: (isLogin) ? Colors.black : Colors.red,
-//               onPrimary: Colors.white,
-//               shape: StadiumBorder()),
-//         ));
-//   }
+    String? hashedPassword = databaseHive.getHashedPassword(username);
 
-//   void prosesLogin(String username, String password) async {
-//     final DatabaseHelper databaseHive = DatabaseHelper();
-//     final enkripPassword = sha256.convert(utf8.encode(password)).toString();
-//     bool found = false;
+    if (hashedPassword != null) {
+      if (enkripPassword == hashedPassword) {
+        found = true;
+      }
+    }
 
-//     found = databaseHive.cekLogin(username, password);
+    if (!found) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Login Failed'),
+          content: const Text('Incorrect username or password'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  size: 80,
+                  color: Colors.green,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Login Success',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MyHomePage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Text('OK'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.fromHeight(40),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+  }
 
-//     String? hashedPassword = databaseHive.getHashedPassword(username);
-
-//     if (hashedPassword != null) {
-//       if (enkripPassword == hashedPassword) {
-//         found = true;
-//       }
-//     }
-
-//     if (!found) {
-//       String text = "Login Gagal";
-
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(
-//           content: Text(text),
-//           backgroundColor: Colors.red,
-//           duration: Duration(seconds: 2),
-//         ),
-//       );
-//     } else {
-//       showDialog(
-//         context: context,
-//         builder: (context) => Dialog(
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(10.0),
-//           ),
-//           child: Container(
-//             padding: EdgeInsets.all(20.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Icon(
-//                   Icons.check_circle,
-//                   size: 80,
-//                   color: Colors.green,
-//                 ),
-//                 SizedBox(height: 20),
-//                 Text(
-//                   'Login Berhasil',
-//                   style: TextStyle(
-//                     fontSize: 18,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     Navigator.pushReplacement(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) {
-//                           return DashboardPage();
-//                         },
-//                       ),
-//                     );
-//                   },
-//                   child: Text('OK'),
-//                   style: ElevatedButton.styleFrom(
-//                     minimumSize: Size.fromHeight(40),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       );
-//     }
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        key: _formKey,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF1e1e1e), Color(0xFF2e2e2e)],
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 50),
+              Text(
+                'Welcome Back',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 30.0),
+              _buildTextField('Username', false, usernameController),
+              SizedBox(height: 16.0),
+              _buildTextField('Password', true, passwordController),
+              SizedBox(height: 12.0),
+              loginButton(),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignUpPage()),
+                  );
+                },
+                child: Text(
+                  'Don\'t have an account? Sign Up',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

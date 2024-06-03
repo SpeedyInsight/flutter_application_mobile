@@ -64,42 +64,42 @@ class _drawerfuncState extends State<drawerfunc> {
         color: Color.fromRGBO(18, 18, 18, 0.9),
         child: ListView(
           children: [
-            DrawerHeader(
-              child: Container(
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        await SelectImage();
-                        //toast message
-                        Fluttertoast.showToast(
-                            msg: "Image Changed",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      },
-                      child: _image == null
-                          ? CircleAvatar(
-                              radius: 50,
-                              backgroundImage: AssetImage('assets/user.png'),
-                            )
-                          : CircleAvatar(
-                              radius: 50,
-                              backgroundImage: FileImage(_image!),
-                            ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Welcome',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // DrawerHeader(
+            //   child: Container(
+            //     child: Column(
+            //       children: [
+            //         GestureDetector(
+            //           onTap: () async {
+            //             await SelectImage();
+            //             //toast message
+            //             Fluttertoast.showToast(
+            //                 msg: "Image Changed",
+            //                 toastLength: Toast.LENGTH_SHORT,
+            //                 gravity: ToastGravity.BOTTOM,
+            //                 timeInSecForIosWeb: 1,
+            //                 backgroundColor: Colors.grey,
+            //                 textColor: Colors.white,
+            //                 fontSize: 16.0);
+            //           },
+            //           child: _image == null
+            //               ? CircleAvatar(
+            //                   radius: 50,
+            //                   backgroundImage: AssetImage('assets/abhy.png'),
+            //                 )
+            //               : CircleAvatar(
+            //                   radius: 50,
+            //                   backgroundImage: FileImage(_image!),
+            //                 ),
+            //         ),
+            //         SizedBox(height: 10),
+            //         Text(
+            //           'Welcome',
+            //           style: TextStyle(color: Colors.white, fontSize: 20),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             listtilefunc('Home', Icons.home, ontap: () {
               //close drawer
               Navigator.pop(context);
@@ -108,51 +108,6 @@ class _drawerfuncState extends State<drawerfunc> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => FavoriateMovies()));
             }),
-            listtilefunc('Our Blogs', FontAwesomeIcons.blogger,
-                ontap: () async {
-              //webview for blog
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                          backgroundColor: Color.fromRGBO(18, 18, 18, 0.5),
-                          appBar: AppBar(
-                            backgroundColor: Color.fromRGBO(18, 18, 18, 0.9),
-                            title: Text('Our Blogs'),
-                          ),
-                          body: WebViewWidget(controller: WebViewController(
-                          ),)
-
-                          // body: WebView(
-                          //   initialUrl: 'https://niranjandahal.com.np/',
-                          //   javascriptMode: JavascriptMode.unrestricted,
-                          // ),
-                          )));
-            }),
-            listtilefunc('Our Website', FontAwesomeIcons.solidNewspaper,
-                ontap: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                            backgroundColor: Color.fromRGBO(18, 18, 18, 0.5),
-                            appBar: AppBar(
-                              backgroundColor: Color.fromRGBO(18, 18, 18, 0.9),
-                              title: Text('Our Website'),
-                            ),
-                            // body: WebView(
-                            //   initialUrl:
-                            //       'https://niranjandahalyt.blogspot.com/',
-                            //   javascriptMode: JavascriptMode.unrestricted,
-                            // ),
-                          )));
-            }),
-            listtilefunc('Subscribe US', FontAwesomeIcons.youtube,
-                ontap: () async {
-              var url =
-                  'https://www.youtube.com/channel/UCeJnnsTq-Lh9E16kCEK49rQ?sub_confirmation=1';
-              await launch(url);
-            }),
             listtilefunc('About', Icons.info, ontap: () {
               showDialog(
                   context: context,
@@ -160,7 +115,7 @@ class _drawerfuncState extends State<drawerfunc> {
                     return AlertDialog(
                       backgroundColor: Color.fromRGBO(18, 18, 18, 0.9),
                       title: overviewtext(
-                          'This App is made by Niranjan Dahal.User can explore,get Details of latest Movies/series.TMDB API is used to fetch data.'),
+                          'Terinspirasi dan dipandu oleh Niranjan Dahal dari YouTube. Digunakan API TMDB.'),
                       actions: [
                         TextButton(
                             onPressed: () {

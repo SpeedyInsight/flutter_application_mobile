@@ -229,10 +229,11 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                         )),
                     SliverList(
                         delegate: SliverChildListDelegate([
-                      addtofavoriate(
+                      AddToFavorite(
+                        userId: 1, // Sesuaikan dengan ID pengguna yang sesuai
                         id: widget.id,
                         type: 'tv',
-                        Details: TvSeriesDetails,
+                        details: TvSeriesDetails,
                       ),
                       Row(children: [
                         Container(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_mobile/helper/user_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_application_mobile/LoginPage/LoginPage.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'HomePage/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'helper/favorite_item_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +19,11 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom]);
 
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(FavoriteItemAdapter());
+  await Hive.openBox<UserModel>('user');
+  await Hive.openBox<FavoriteItem>('favorites');
 }
 
 class MyApp extends StatelessWidget {
@@ -52,7 +59,7 @@ class _intermediatescreenState extends State<intermediatescreen> {
       backgroundColor: Color.fromRGBO(18, 18, 18, 1),
 
       duration: 2000,
-      nextScreen: MyHomePage(),
+      nextScreen: LoginPage(),
       splash: Container(
         child: Center(
           child: Column(

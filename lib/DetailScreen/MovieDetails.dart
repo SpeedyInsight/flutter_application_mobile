@@ -80,18 +80,18 @@ class _MovieDetailsState extends State<MovieDetails> {
           "review": UserReviewjson['results'][i]['content'],
           //check rating is null or not
           "rating":
-              UserReviewjson['results'][i]['author_details']['rating'] == null
-                  ? "Not Rated"
-                  : UserReviewjson['results'][i]['author_details']['rating']
-                      .toString(),
+          UserReviewjson['results'][i]['author_details']['rating'] == null
+              ? "Not Rated"
+              : UserReviewjson['results'][i]['author_details']['rating']
+              .toString(),
           "avatarphoto": UserReviewjson['results'][i]['author_details']
-                      ['avatar_path'] ==
-                  null
+          ['avatar_path'] ==
+              null
               ? "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
               : "https://image.tmdb.org/t/p/w500" +
-                  UserReviewjson['results'][i]['author_details']['avatar_path'],
+              UserReviewjson['results'][i]['author_details']['avatar_path'],
           "creationdate":
-              UserReviewjson['results'][i]['created_at'].substring(0, 10),
+          UserReviewjson['results'][i]['created_at'].substring(0, 10),
           "fullreviewurl": UserReviewjson['results'][i]['url'],
         });
       }
@@ -113,7 +113,7 @@ class _MovieDetailsState extends State<MovieDetails> {
     // print(similarmovieslist);
     /////////////////////////////recommended movies
     var recommendedmoviesresponse =
-        await http.get(Uri.parse(recommendedmoviesurl));
+    await http.get(Uri.parse(recommendedmoviesurl));
     if (recommendedmoviesresponse.statusCode == 200) {
       var recommendedmoviesjson = jsonDecode(recommendedmoviesresponse.body);
       for (var i = 0; i < recommendedmoviesjson['results'].length; i++) {
@@ -155,6 +155,12 @@ class _MovieDetailsState extends State<MovieDetails> {
     ]);
   }
 
+  void addToFavorite({required int id, required String type, required List<Map<String, dynamic>> details}) {
+    // Implementasikan logika penambahan ke favorit di sini
+    // Misalnya, simpan data ke database lokal atau kirim ke server
+    Fluttertoast.showToast(msg: 'Added to favorite');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,7 +198,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MyHomePage()),
-                                    (route) => false);
+                                        (route) => false);
                               },
                               icon: Icon(FontAwesomeIcons.houseUser),
                               iconSize: 25,
@@ -202,7 +208,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                         centerTitle: false,
                         pinned: true,
                         expandedHeight:
-                            MediaQuery.of(context).size.height * 0.4,
+                        MediaQuery.of(context).size.height * 0.4,
                         flexibleSpace: FlexibleSpaceBar(
                           collapseMode: CollapseMode.parallax,
                           background: FittedBox(
@@ -222,92 +228,92 @@ class _MovieDetailsState extends State<MovieDetails> {
                         )),
                     SliverList(
                         delegate: SliverChildListDelegate([
-                      //add to favoriate button
-                      addtofavoriate(
-                        id: widget.id,
-                        type: 'movie',
-                        Details: MovieDetails,
-                      ),
-
-                      Column(
-                        children: [
-                          Row(children: [
-                            Container(
-                                padding: EdgeInsets.only(left: 10, top: 10),
-                                height: 50,
-                                width: MediaQuery.of(context).size.width,
-                                child: ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: MoviesGeneres.length,
-                                    itemBuilder: (context, index) {
-                                      //generes box
-                                      return Container(
-                                          margin: EdgeInsets.only(right: 10),
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  Color.fromRGBO(25, 25, 25, 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child:
-                                              genrestext(MoviesGeneres[index]));
-                                    })),
-                          ]),
-                          Row(
+                          //add to favoriate button
+                          AddToFavorite(
+                            userId: 1, // Sesuaikan dengan ID pengguna yang sesuai
+                            id: widget.id,
+                            type: 'movie',
+                            details: MovieDetails,
+                          ),
+                          Column(
                             children: [
-                              Container(
-                                  padding: EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(left: 10, top: 10),
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(25, 25, 25, 1),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: genrestext(
-                                      MovieDetails[0]['runtime'].toString() +
-                                          ' min'))
+                              Row(children: [
+                                Container(
+                                    padding: EdgeInsets.only(left: 10, top: 10),
+                                    height: 50,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ListView.builder(
+                                        physics: BouncingScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: MoviesGeneres.length,
+                                        itemBuilder: (context, index) {
+                                          //generes box
+                                          return Container(
+                                              margin: EdgeInsets.only(right: 10),
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                  Color.fromRGBO(25, 25, 25, 1),
+                                                  borderRadius:
+                                                  BorderRadius.circular(10)),
+                                              child:
+                                              genrestext(MoviesGeneres[index]));
+                                        })),
+                              ]),
+                              Row(
+                                children: [
+                                  Container(
+                                      padding: EdgeInsets.all(10),
+                                      margin: EdgeInsets.only(left: 10, top: 10),
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          color: Color.fromRGBO(25, 25, 25, 1),
+                                          borderRadius: BorderRadius.circular(10)),
+                                      child: genrestext(
+                                          MovieDetails[0]['runtime'].toString() +
+                                              ' min'))
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10),
-                          child: tittletext('Movie Story :')),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10),
-                          child: overviewtext(
-                              MovieDetails[0]['overview'].toString())),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, top: 10),
+                              child: tittletext('Movie Story :')),
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, top: 10),
+                              child: overviewtext(
+                                  MovieDetails[0]['overview'].toString())),
 
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10),
-                        child: ReviewUI(revdeatils: UserREviews),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20),
-                          child: normaltext('Release Date : ' +
-                              MovieDetails[0]['release_date'].toString())),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20),
-                          child: normaltext('Budget : ' +
-                              MovieDetails[0]['budget'].toString())),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20),
-                          child: normaltext('Revenue : ' +
-                              MovieDetails[0]['revenue'].toString())),
-                      sliderlist(similarmovieslist, "Similar Movies", "movie",
-                          similarmovieslist.length),
-                      sliderlist(recommendedmovieslist, "Recommended Movies",
-                          "movie", recommendedmovieslist.length),
-                      // Container(
-                      //     height: 50,
-                      //     child: Center(child: normaltext("By Niranjan Dahal")))
-                    ]))
+                          Padding(
+                            padding: EdgeInsets.only(left: 20, top: 10),
+                            child: ReviewUI(revdeatils: UserREviews),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, top: 20),
+                              child: normaltext('Release Date : ' +
+                                  MovieDetails[0]['release_date'].toString())),
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, top: 20),
+                              child: normaltext('Budget : ' +
+                                  MovieDetails[0]['budget'].toString())),
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, top: 20),
+                              child: normaltext('Revenue : ' +
+                                  MovieDetails[0]['revenue'].toString())),
+                          sliderlist(similarmovieslist, "Similar Movies", "movie",
+                              similarmovieslist.length),
+                          sliderlist(recommendedmovieslist, "Recommended Movies",
+                              "movie", recommendedmovieslist.length),
+                          // Container(
+                          //     height: 50,
+                          //     child: Center(child: normaltext("By Niranjan Dahal")))
+                        ]))
                   ]);
             } else {
               return Center(
                   child: CircularProgressIndicator(
-                color: Colors.amber,
-              ));
+                    color: Colors.amber,
+                  ));
             }
           }),
     );

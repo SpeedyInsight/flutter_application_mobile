@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_mobile/SqfLitelocalstorage/NoteDbHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../DetailScreen/checker.dart';
 
 class FavoriateMovies extends StatefulWidget {
